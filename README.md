@@ -61,7 +61,7 @@ lockfree_pool_free_fast(obj2);
 
 ### Prerequisites
 
-- **C++20 or later** compiler (GCC 10+, Clang 10+, MSVC 2019 16.11+)
+- **C++20 or later** compiler (GCC 10+, Clang 10+, MSVC with C++20 support)
 - **CMake 3.16+**
 - **Google Test** (automatically downloaded if not found)
 
