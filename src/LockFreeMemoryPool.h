@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <new>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -30,6 +31,16 @@
 #endif
 
 namespace lfmemorypool {
+
+namespace {
+    // Cache line size for optimal alignment
+    constexpr size_t cache_line_size = 
+#ifdef __cpp_lib_hardware_interference_size
+        std::hardware_destructive_interference_size;
+#else
+        64;  // Common cache line size fallback
+#endif
+}
 
 #ifndef NDEBUG
 #define SAFE_CALL(expr, message)        \
@@ -195,7 +206,7 @@ class LockFreeMemoryPool final {
 
     // Starting index for allocation search (performance optimization)
     // This doesn't need to be perfectly accurate, just a starting point
-    alignas(64) std::atomic<size_t> search_start{0};  // Avoid false sharing
+    alignas(cache_line_size) std::atomic<size_t> search_start{0};
 };
 
 // Global Lock-Free Pool Management System
